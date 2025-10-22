@@ -1,12 +1,19 @@
-# quarkus-example
-App quarkus simple
+# Quarkus example
+App quarkus simple with cassandra
 
-### Requirements
+# Documentation
+
+* [quarkus-cassandra](https://es.quarkus.io/guides/cassandra)
+* [datastax-mapper](https://docs.datastax.com/en/developer/java-driver/4.17/manual/mapper/index.html)
+* [datastax-config](https://docs.datastax.com/en/developer/java-driver/4.17/manual/core/configuration/index.html)
+
+
+## Requirements
 * java 21
 * maven
 * docker
 
-### Startup
+## Startup
 
 * Cassandra up
 
@@ -38,7 +45,7 @@ App quarkus simple
     make java_app_up
     ```
 
-### Stop
+## Stop
 
 * Cassandra
 
@@ -46,7 +53,7 @@ App quarkus simple
     make docker_cass_stop
     ```
 
-### Service
+## Service
 
 * health-check
 
