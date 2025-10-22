@@ -1,0 +1,114 @@
+
+networks:
+  cassandra-net:
+    name: cassandra-net
+    driver: bridge
+
+services:
+  cassandra-node1:
+    image: cassandra:5.0
+    container_name: cassandra-node1
+    hostname: cassandra-node1
+    restart: unless-stopped
+    environment: &cassandra-env
+      CASSANDRA_SEEDS: "cassandra-node1:7000,cassandra-node2:7000,,cassandra-node3:7000"
+      CASSANDRA_CLUSTER_NAME: "QuarkusCluster"
+      CASSANDRA_DC: "datacenter1"
+      CASSANDRA_RACK: "rack1"
+      CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+      CASSANDRA_NUM_TOKENS: 256
+      # ENABLE AUTH
+      CASSANDRA_AUTHENTICATOR: "PasswordAuthenticator"
+      CASSANDRA_AUTHORIZER: "CassandraAuthorizer"
+      # CONFIG RED
+      CASSANDRA_LISTEN_ADDRESS: auto
+      CASSANDRA_BROADCAST_ADDRESS: cassandra-node1
+      CASSANDRA_RPC_ADDRESS: "0.0.0.0"
+      CASSANDRA_BROADCAST_RPC_ADDRESS: cassandra-node1
+      # CONFIG MEMORY
+      HEAP_NEWSIZE: "128M"
+      MAX_HEAP_SIZE: "1024M"
+    healthcheck:
+      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra", "-e", "describe keyspaces"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+    networks:
+      - cassandra-net
+    ports:
+      - "9042:9042"   # CQL port
+      - "7199:7199"   # JMX port
+    volumes:
+      - cassandra-node1-data:/var/lib/cassandra
+      #- ./logs/node1:/var/log/cassandra
+    ulimits:
+      memlock: -1
+      nofile: 100000
+      nproc: 32768
+
+  cassandra-node2:
+    image: cassandra:5.0
+    container_name: cassandra-node2
+    hostname: cassandra-node2
+    restart: unless-stopped
+    environment:
+      <<: *cassandra-env
+      CASSANDRA_BROADCAST_ADDRESS: cassandra-node2
+      CASSANDRA_BROADCAST_RPC_ADDRESS: cassandra-node2
+    healthcheck:
+      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra", "-e", "describe keyspaces"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+    networks:
+      - cassandra-net
+    ports:
+      - "9043:9042"
+      - "7200:7199"
+    volumes:
+      - cassandra-node2-data:/var/lib/cassandra
+      #- ./logs/node2:/var/log/cassandra
+    depends_on:
+      - cassandra-node1
+
+    ulimits:
+      memlock: -1
+      nofile: 100000
+      nproc: 32768
+
+  cassandra-node3:
+    image: cassandra:5.0
+    container_name: cassandra-node3
+    hostname: cassandra-node3
+    restart: unless-stopped
+    environment:
+      <<: *cassandra-env
+      CASSANDRA_BROADCAST_ADDRESS: cassandra-node3
+      CASSANDRA_BROADCAST_RPC_ADDRESS: cassandra-node3
+    healthcheck:
+      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra", "-e", "describe keyspaces"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+    networks:
+      - cassandra-net
+    ports:
+      - "9044:9042"
+      - "7201:7199"
+    volumes:
+      - cassandra-node3-data:/var/lib/cassandra
+      #- ./logs/node3:/var/log/cassandra
+    depends_on:
+      - cassandra-node2
+    ulimits:
+      memlock: -1
+      nofile: 100000
+      nproc: 32768
+
+volumes:
+  cassandra-node1-data:
+  cassandra-node2-data:
+  cassandra-node3-data:
