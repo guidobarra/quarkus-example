@@ -33,13 +33,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--dependency>
-                <groupId>${quarkus.platform.group-id}</groupId>
-                <artifactId>quarkus-cassandra-bom</artifactId>
-                <version>${quarkus.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency-->
         </dependencies>
     </dependencyManagement>
 
@@ -71,17 +64,6 @@
             <artifactId>cassandra-quarkus-client</artifactId>
             <version>${cassandra-quarkus.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.cassandra</groupId>
-            <artifactId>java-driver-core</artifactId>
-            <version>${cassandra-drive.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cassandra</groupId>
-            <artifactId>java-driver-mapper-runtime</artifactId>
-            <version>${cassandra-drive.version}</version>
-        </dependency>
-
 
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -127,13 +109,6 @@
                     <parameters>true</parameters>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>com.datastax.oss.quarkus</groupId>
-                            <artifactId>cassandra-quarkus-mapper-processor</artifactId>
-                            <version>${cassandra-quarkus.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>
