@@ -8,6 +8,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import org.jboss.resteasy.reactive.ResponseStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 
@@ -15,6 +17,8 @@ import java.net.URI;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class SearchHistoryResource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchHistoryResource.class);
 
     private final SearchHistoryService searchHistoryService;
 
@@ -31,6 +35,7 @@ public class SearchHistoryResource {
             @QueryParam("monthBucket") String monthBucket,
             @QueryParam("useQuery") boolean useQuery) {
 
+        LOGGER.info("input userId: {}, monthBucket: {}, useQuery: {}", userId, monthBucket, useQuery);
         var searchHistory =  searchHistoryService.getByUserIdAndMonthBucket(userId, monthBucket, useQuery);
 
         return Response.ok(searchHistory).build();
