@@ -30,7 +30,8 @@ App quarkus simple with cassandra
 * Cassandra create keyspace y table
 
     ```
-    ejecutar script docker/init.cql
+    ejecutar script docker/001-init.cql
+    ejecutar script docker/002-insert_search_history.cql
     ```
 
 * App build
