@@ -71,7 +71,8 @@ services:
       - cassandra-node2-data:/var/lib/cassandra
       #- ./logs/node2:/var/log/cassandra
     depends_on:
-      - cassandra-node1
+      cassandra-node1:
+        condition: service_healthy
 
     ulimits:
       memlock: -1
@@ -102,11 +103,33 @@ services:
       - cassandra-node3-data:/var/lib/cassandra
       #- ./logs/node3:/var/log/cassandra
     depends_on:
-      - cassandra-node2
+      cassandra-node1:
+        condition: service_healthy
+      cassandra-node2:
+        condition: service_healthy
     ulimits:
       memlock: -1
       nofile: 100000
       nproc: 32768
+
+  cassandra-exec-file-cql:
+    container_name: cassandra-exec-file-cql
+    image: cassandra:5.0
+    depends_on:
+      cassandra-node1:
+        condition: service_healthy
+      cassandra-node2:
+        condition: service_healthy
+      cassandra-node3:
+        condition: service_healthy
+    volumes:
+      - ./cassandra-init/:/docker-entrypoint-initdb.d/
+    command: >
+      bash -c "
+      sh /docker-entrypoint-initdb.d/entrypoint.sh
+      "
+    networks:
+      - cassandra-net
 
 volumes:
   cassandra-node1-data:

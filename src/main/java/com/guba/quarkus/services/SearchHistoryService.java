@@ -18,8 +18,12 @@ public class SearchHistoryService {
     this.searchHistoryDao = searchHistoryDao;
   }
 
-  public List<SearchHistory> getByUserIdAndMonthBucket(String userId, String monthBucket) {
+  public List<SearchHistory> getByUserIdAndMonthBucket(String userId, String monthBucket, boolean useQuery) {
+    if (useQuery)
+      return searchHistoryDao.queryFindByUserIdAndMonthBucket(UUID.fromString(userId), monthBucket).all();
     return searchHistoryDao.findByUserIdAndMonthBucket(UUID.fromString(userId), monthBucket).all();
   }
+
+  /*Add more methods*/
 
 }
