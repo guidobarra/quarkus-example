@@ -62,19 +62,9 @@ App quarkus simple with cassandra
     curl --location 'http://localhost:9292/health-check'
     ```
 
-* get-all
+* get search history by user_id and month_bucket
 
     ```
-    curl --location 'http://localhost:9292/fruits'
+    curl --location 'http://localhost:9292/searches?userId=123e4567-e89b-12d3-a456-426614174000&monthBucket=2024-10&useQuery=false'
     ```
-  
-* create
 
-    ```
-    curl --location 'http://localhost:9292/fruits' \
-    --header 'Content-Type: application/json' \
-    --data '{
-    "name": "manzana1",
-    "description": "roja"
-    }'
-    ```
