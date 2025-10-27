@@ -24,7 +24,7 @@ App quarkus simple with cassandra
 * Cassandra status
 
     ```
-    make docker_command_status_cass
+    make docker_cass_status
     ```
   
 * Cassandra create keyspace y table

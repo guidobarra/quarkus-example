@@ -6,7 +6,7 @@ SHELL=/bin/bash
 docker_cass_up:
 	docker compose -f docker/cass.yml up -d
 
-docker_command_status_cass:
+docker_cass_status:
 	docker exec -it cassandra-node2 nodetool status
 
 docker_cass_stop:

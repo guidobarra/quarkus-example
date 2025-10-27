@@ -7,11 +7,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
-import org.jboss.resteasy.reactive.ResponseStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.time.LocalDate;
 
 @Path("/searches")
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,7 +29,6 @@ public class SearchHistoryResource {
 
     /* Example */
     @GET
-    @ResponseStatus(200)
     public Response getSearchHistory(
             @QueryParam("userId") String userId,
             @QueryParam("monthBucket") String monthBucket,
@@ -42,21 +41,44 @@ public class SearchHistoryResource {
     }
 
     /* Add code */
+    @GET
+    @Path("/ranges")
+    public Response getSearchHistoryInRange(
+            @QueryParam("userId") String userId,
+            @QueryParam("monthBucket") String monthBucket,
+            @QueryParam("startDate") LocalDate startDate,
+            @QueryParam("endDate") LocalDate endDate) {
+
+        return Response.ok(null).build();
+    }
+
+    @GET
+    @Path("/weeks")
+    public Response getSearchHistoryInWeeks(
+            @QueryParam("userId") String userId,
+            @QueryParam("monthBucket") String monthBucket,
+            @QueryParam("weeks") int weeks) {
+
+
+        return Response.ok(null).build();
+    }
+
     @POST
     public Response save(SearchHistory searchHistory) {
+        var saved = this.searchHistoryService.save(searchHistory);
 
         URI location = UriBuilder
                 .fromPath("/searches/{userId}/")
-                .build("userId");
+                .build(searchHistory.userId());
         return Response
                 .created(location)
-                .entity(null)
+                .entity(saved)
                 .build();
     }
 
     @PUT
     public Response update(SearchHistory searchHistory) {
-        return Response.ok(searchHistory).build();
+        return Response.ok(null).build();
     }
 
     @DELETE
